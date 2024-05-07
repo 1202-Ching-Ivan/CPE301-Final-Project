@@ -59,15 +59,15 @@ volatile bool isRunning = false;
 
 //State Flags
 enum States {
-  disabled,
-  idle,
-  running,
-  error,
-  start,
-} state;
+  DISABLED,
+  IDLE,
+  RUNNING,
+  ERROR,
+  START
+};
 
-States currentState = disabled;
-States prevState = start;
+States currentState = DISABLED;
+States prevState = START;
 
 //Function Names
 void idleState();
@@ -107,16 +107,16 @@ void loop() {
 
   if (currentState != prevState) {
     switch (currentState) {
-      case idle:
+      case IDLE:
         idleState();
         break;
-      case error:
+      case ERROR:
         errorState();
         break;
-      case running:
+      case RUNNING:
         runningState();
         break;
-      case disabled:
+      case DISABLED:
         disabledState();
         break;
     }
@@ -137,7 +137,7 @@ void idleState() {
 
     //change flags for the states and button and turn on cooresponding LED
     if (startButtonPressed) {
-      currentState = running;
+      currentState = RUNNING;
       startButtonPressed = false;
       PORTD &= ~(1 << GREEN_LED);
     }
@@ -146,7 +146,7 @@ void idleState() {
     //Turn off fan
     if (stopButtonPressed) {
       stopButtonPressed = false;
-      currentState = disabled;
+      currentState = DISABLED;
       PORTD &= ~((1 << GREEN_LED) | (1 << BLUE_LED));
       PORTD &= ~(1 << FAN_MOTOR);
     }
@@ -163,7 +163,7 @@ void idleState() {
     //change flags for the states and button and turn on cooresponding LED
     if (startButtonPressed) {
       startButtonPressed = false;
-      currentState = idle;
+      currentState = IDLE;
       PORTD &= ~(1 << RED_LED);
     }
   }
@@ -184,7 +184,7 @@ void idleState() {
     //change flags for the states and button and turn on cooresponding LED
     if (stopButtonPressed) {
       stopButtonPressed = false;
-      currentState = disabled;
+      currentState = DISABLED;
       isRunning = false;
       PORTD &= ~((1 << FAN_MOTOR) | (1 << BLUE_LED));
     }
@@ -192,7 +192,7 @@ void idleState() {
 
     //Read humidity and temp and adjust state
     if (dht.readHumidity() < HUMIDITY_THRESHOLD && dht.readTemperature() > TEMPERATURE_THRESHOLD) {
-      currentState = error;
+      currentState = ERROR;
       PORTD &= ~(1 << FAN_MOTOR);
       isRunning = false;
       PORTD &= ~(1 << BLUE_LED);
@@ -210,7 +210,7 @@ void idleState() {
     //change flags for the states and button and turn on cooresponding LED
     if (startButtonPressed) {
       startButtonPressed = false;
-      currentState = idle;
+      currentState = IDLE;
       PORTD &= ~(1 << YELLOW_LED);
     }
   }
@@ -244,7 +244,7 @@ void idleState() {
   void checkWaterLevel() {
     int waterLevel = analogRead(WATER_LEVEL_PIN);
     if (waterLevel < WATER_LEVEL_THRESHOLD) {
-      currentState = error;
+      currentState = ERROR;
       PORTD &= ~(1 << FAN_MOTOR);
       isRunning = false;
       PORTD &= ~(1 << BLUE_LED);
