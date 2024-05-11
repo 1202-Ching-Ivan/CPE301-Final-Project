@@ -1,4 +1,6 @@
 # CPE301-Final-Project
+Ivan Ching, Angela Wu, and Divisha Naharas
+
 Full Documentation
 
 https://docs.google.com/document/d/1xEC2ZcBTXbJL_ikaYuqPgeiJFZhcmx397U9M6ES3sX8/edit?usp=sharing
