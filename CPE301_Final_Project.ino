@@ -102,7 +102,7 @@ void setup() {
   Wire.begin();
   lcd.begin(16, 2);
 
-  lcd.print("Disabled");
+  lcd.print("System Starting");
 }
 
 //Loop
@@ -161,7 +161,7 @@ void idleState() {
   void errorState() {
     updateDateTime();
     lcd.clear();
-    lcd.print("ERROR: Low Water");
+    lcd.print("Error: Water Low");
     //Red for error
     PORTD |= (1 << RED_LED);
 
